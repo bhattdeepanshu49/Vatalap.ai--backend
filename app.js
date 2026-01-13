@@ -20,18 +20,20 @@ app.get("/", (req, res) => {
 app.post("/chat", async (req, res) => {
   try {
     const { message, threadId } = req.body;
-
-    if (!message) {
-      return res.status(400).json({ message: "Message is required" });
-    }
+    console.log("📩 Incoming:", message, threadId);
 
     const result = await generate(message, threadId);
 
+    console.log("✅ Generated:", result);
+
     res.json({ message: result });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Something went wrong" });
+    console.error("🔥 BACKEND CRASH:", error);
+    res.status(500).json({
+      error: error.message || "Internal Server Error",
+    });
   }
 });
+
 
 export default app; 
